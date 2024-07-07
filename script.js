@@ -12,8 +12,8 @@ const resources = {
 };
 
 const buildings = [];
-
 let selectedBuilding = null;
+let isDragging = false;
 let offsetX, offsetY;
 
 function loadImages() {
@@ -42,6 +42,7 @@ function updateResources() {
         document.getElementById(`${resource}-amount`).innerText = resources[resource].amount;
         document.getElementById(`${resource}-production`).innerText = `(+${resources[resource].production}/s)`;
     });
+    saveGameState();
 }
 
 function addProduction() {
@@ -54,17 +55,19 @@ document.querySelectorAll('.building').forEach(building => {
     building.addEventListener('mousedown', e => {
         const type = building.getAttribute('data-type');
         const img = building.img;
+        const rect = canvas.getBoundingClientRect();
 
         selectedBuilding = {
             type,
             img,
-            x: e.clientX - 50, // Initial position
-            y: e.clientY - 50, // Initial position
+            x: e.clientX - rect.left - 25, // Adjust for image center
+            y: e.clientY - rect.top - 25, // Adjust for image center
             width: 50,
             height: 50,
             production: 1
         };
-        buildings.push(selectedBuilding);
+
+        isDragging = true;
     });
 });
 
@@ -79,12 +82,13 @@ canvas.addEventListener('mousedown', e => {
             selectedBuilding = building;
             offsetX = mouseX - building.x;
             offsetY = mouseY - building.y;
+            isDragging = true;
         }
     });
 });
 
 canvas.addEventListener('mousemove', e => {
-    if (selectedBuilding) {
+    if (isDragging && selectedBuilding) {
         const rect = canvas.getBoundingClientRect();
         selectedBuilding.x = e.clientX - rect.left - offsetX;
         selectedBuilding.y = e.clientY - rect.top - offsetY;
@@ -92,10 +96,47 @@ canvas.addEventListener('mousemove', e => {
 });
 
 canvas.addEventListener('mouseup', () => {
+    if (isDragging && selectedBuilding) {
+        if (!buildings.includes(selectedBuilding)) {
+            buildings.push(selectedBuilding);
+            addProduction();
+        }
+        saveGameState();
+    }
+    isDragging = false;
     selectedBuilding = null;
 });
 
+function saveGameState() {
+    const gameState = {
+        resources,
+        buildings: buildings.map(building => ({
+            type: building.type,
+            x: building.x,
+            y: building.y,
+            width: building.width,
+            height: building.height,
+            production: building.production
+        }))
+    };
+    localStorage.setItem('gameState', JSON.stringify(gameState));
+}
+
+function loadGameState() {
+    const savedState = localStorage.getItem('gameState');
+    if (savedState) {
+        const gameState = JSON.parse(savedState);
+        Object.assign(resources, gameState.resources);
+        gameState.buildings.forEach(savedBuilding => {
+            const img = new Image();
+            img.src = `./${savedBuilding.type}.png`;
+            buildings.push({ ...savedBuilding, img });
+        });
+    }
+}
+
 loadImages();
+loadGameState();
 draw();
-addProduction();
 setInterval(updateResources, 1000);
+
