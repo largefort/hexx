@@ -1,1 +1,90 @@
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    background-color: #f4f4f4;
+}
+
+#resource-bar {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+    background-color: #ddd;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.resource {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.production {
+    font-size: 0.8em;
+    color: #888;
+}
+
+#sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 100px;
+    background-color: #bbb;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+.building {
+    margin: 10px 0;
+    position: relative;
+    cursor: pointer;
+}
+
+.building img {
+    width: 50px;
+    height: 50px;
+}
+
+.building::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 15px 15px rgba(255, 255, 255, 0.7);
+    opacity: 0;
+    animation: glow 1.5s infinite;
+}
+
+@keyframes glow {
+    0% {
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.7;
+    }
+}
+
+#gameCanvas {
+    flex-grow: 1;
+    border: 1px solid #000;
+    background-color: #a9c9a4;
+    margin-left: 100px; /* Adjusted for sidebar width */
+}
 
