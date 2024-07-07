@@ -40,12 +40,17 @@ function updateResources() {
     Object.keys(resources).forEach(resource => {
         resources[resource].amount += resources[resource].production;
         document.getElementById(`${resource}-amount`).innerText = resources[resource].amount;
-        document.getElementById(`${resource}-production`).innerText = `(+${resources[resource].production}/s)`;
+        document.getElementById(`${resource}-production}`).innerText = `(+${resources[resource].production}/s)`;
     });
     saveGameState();
 }
 
-function addProduction() {
+function recalculateProduction() {
+    // Reset all production values
+    Object.keys(resources).forEach(resource => {
+        resources[resource].production = 0;
+    });
+    // Recalculate production based on buildings
     buildings.forEach(building => {
         resources[building.type].production += building.production;
     });
@@ -99,7 +104,7 @@ canvas.addEventListener('mouseup', () => {
     if (isDragging && selectedBuilding) {
         if (!buildings.includes(selectedBuilding)) {
             buildings.push(selectedBuilding);
-            addProduction();
+            recalculateProduction(); // Recalculate production when a new building is added
         }
         saveGameState();
     }
@@ -132,6 +137,7 @@ function loadGameState() {
             img.src = `./${savedBuilding.type}.png`;
             buildings.push({ ...savedBuilding, img });
         });
+        recalculateProduction(); // Recalculate production when loading game state
     }
 }
 
@@ -139,4 +145,3 @@ loadImages();
 loadGameState();
 draw();
 setInterval(updateResources, 1000);
-
