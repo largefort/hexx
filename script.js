@@ -4,11 +4,19 @@ canvas.width = window.innerWidth - 100; // Adjust for sidebar width
 canvas.height = window.innerHeight - 50; // Adjust for resource bar height
 
 const resources = {
-    wood: { amount: 0, production: 0 },
-    stone: { amount: 0, production: 0 },
-    food: { amount: 0, production: 0 },
-    gold: { amount: 0, production: 0 },
-    iron: { amount: 0, production: 0 }
+    wood: { amount: 0, production: 0, passive: 1 },
+    stone: { amount: 0, production: 0, passive: 1 },
+    food: { amount: 0, production: 0, passive: 1 },
+    gold: { amount: 0, production: 0, passive: 1 },
+    iron: { amount: 0, production: 0, passive: 1 }
+};
+
+const buildingTypes = {
+    wood: { production: 5 },
+    stone: { production: 3 },
+    food: { production: 4 },
+    gold: { production: 2 },
+    iron: { production: 6 }
 };
 
 const buildings = [];
@@ -38,9 +46,9 @@ function draw() {
 
 function updateResources() {
     Object.keys(resources).forEach(resource => {
-        resources[resource].amount += resources[resource].production;
+        resources[resource].amount += resources[resource].production + resources[resource].passive;
         document.getElementById(`${resource}-amount`).innerText = resources[resource].amount;
-        document.getElementById(`${resource}-production}`).innerText = `(+${resources[resource].production}/s)`;
+        document.getElementById(`${resource}-production`).innerText = `(+${resources[resource].production + resources[resource].passive}/s)`;
     });
     saveGameState();
 }
@@ -69,7 +77,7 @@ document.querySelectorAll('.building').forEach(building => {
             y: e.clientY - rect.top - 25, // Adjust for image center
             width: 50,
             height: 50,
-            production: 1
+            production: buildingTypes[type].production // Set specific production rate
         };
 
         isDragging = true;
