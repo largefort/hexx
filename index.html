@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medieval City Builder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="resource-bar">
+        <div class="resource">
+            <span>Wood: <span id="wood-amount">0</span></span>
+            <span class="production" id="wood-production">(+0/s)</span>
+        </div>
+        <div class="resource">
+            <span>Stone: <span id="stone-amount">0</span></span>
+            <span class="production" id="stone-production">(+0/s)</span>
+        </div>
+        <div class="resource">
+            <span>Food: <span id="food-amount">0</span></span>
+            <span class="production" id="food-production">(+0/s)</span>
+        </div>
+        <div class="resource">
+            <span>Gold: <span id="gold-amount">0</span></span>
+            <span class="production" id="gold-production">(+0/s)</span>
+        </div>
+        <div class="resource">
+            <span>Iron: <span id="iron-amount">0</span></span>
+            <span class="production" id="iron-production">(+0/s)</span>
+        </div>
+    </div>
+    <div id="sidebar">
+        <div class="building" data-type="wood"><img src="wood.png" alt="Wood Building"></div>
+        <div class="building" data-type="stone"><img src="stone.png" alt="Stone Building"></div>
+        <div class="building" data-type="food"><img src="food.png" alt="Food Building"></div>
+        <div class="building" data-type="gold"><img src="gold.png" alt="Gold Building"></div>
+        <div class="building" data-type="iron"><img src="iron.png" alt="Iron Building"></div>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+    <script src="script.js"></script>
+</body>
+</html>
